@@ -32,11 +32,12 @@ type HashTable struct {
 	array [ArraySize]*bucket
 }
 
-// bucket is a linked list in eaach slot of the
+// bucket is a linked list in each slot of the hash table array
 type bucket struct {
 	head *bucketNode
 }
 
+// bucketNode is a liniked list node that holds the key
 type bucketNode struct {
 	key  string
 	next *bucketNode
