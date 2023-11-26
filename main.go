@@ -3,6 +3,8 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"log"
+	"net/http"
 	"os"
 )
 
@@ -19,6 +21,9 @@ func main() {
 	p1.save()
 	p2, _ := loadPage("TestPage")
 	fmt.Println(string(p2.Body))
+
+	http.HandleFunc("/", handler)
+	log.Fatal(http.ListenAndServe(":8080", nil))
 }
 
 type Page struct {
@@ -38,4 +43,8 @@ func loadPage(title string) (*Page, error) {
 		return nil, err
 	}
 	return &Page{Titile: title, Body: body}, nil
+}
+
+func handler(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintf(w, "Hi there, I love %s!", r.URL.Path[1:])
 }
