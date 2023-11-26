@@ -1,44 +1,41 @@
 package main
 
-import "fmt"
+import (
+	"bufio"
+	"fmt"
+	"os"
+)
 
 func main() {
-	fmt.Println("Hello World!")
 
-	var firstname, lastname string
-	fmt.Scan(&firstname, &lastname)
+	// var fileName string
+	// fmt.Print("Please enter the file name without empty space:")
+	// fmt.Scan(&fileName)
 
-	fmt.Printf("Hello %s %s, welcome to the first GO program\n", firstname, lastname)
-
-	// Pointers
-	i, j := 45, 100
-	fmt.Println(i, j)
-	fmt.Println(&i, &j)
-
-	p := &i
-	fmt.Println(p)
-	fmt.Println(*p)
-
-	testHashTable := &HashTable{}
-	fmt.Println(testHashTable)
-
+	fmt.Print("Please enter a message:")
+	text := bufio.NewReader(os.Stdin)
+	inputText, _ := text.ReadString('\n')
+	p1 := &Page{Titile: "TestPage", Body: []byte(inputText)}
+	p1.save()
+	p2, _ := loadPage("TestPage")
+	fmt.Println(string(p2.Body))
 }
 
-// Custom HashTable implimentation
-const ArraySize = 7
-
-// Custom HashTable data sturcture implimentation
-type HashTable struct {
-	array [ArraySize]*bucket
+type Page struct {
+	Titile string
+	Body   []byte
 }
 
-// bucket is a linked list in each slot of the hash table array
-type bucket struct {
-	head *bucketNode
+func (p *Page) save() error {
+	filename := p.Titile + ".txt"
+	return os.WriteFile(filename, p.Body, 0600)
 }
 
-// bucketNode is a liniked list node that holds the key
-type bucketNode struct {
-	key  string
-	next *bucketNode
+func loadPage(title string) (*Page, error) {
+	filename := title + ".txt"
+	body, err := os.ReadFile(filename)
+	if err != nil {
+		return nil, err
+	}
+	return &Page{Titile: title, Body: body}, nil
 }
