@@ -1,1 +1,2 @@
 "Hello there what's up"
+Might Go lang replace Java in the future?
